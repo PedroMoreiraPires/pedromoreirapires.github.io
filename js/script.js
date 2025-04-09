@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { clientX, clientY, target } = e;
         cursorFollower.style.opacity = '1';
         setTimeout(() => {
-            cursorFollower.style.transform = `translate(${clientX}px, ${clientY}px)`;
+            cursorFollower.style.transform = `translate(${clientX - cursorFollower.offsetWidth / 2}px, ${clientY - cursorFollower.offsetHeight / 2}px)`;
         }, 50);
         updateCursorStyle(target);
     });
