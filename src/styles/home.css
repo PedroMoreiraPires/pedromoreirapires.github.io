@@ -310,7 +310,7 @@ body main {
 .project a {
   text-decoration: none;
 }
-.project a p:not(p) {
+.project a p {
   color: var(--accent-cool);
 }
 .project:hover {
