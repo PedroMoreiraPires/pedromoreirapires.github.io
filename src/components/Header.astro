@@ -1,0 +1,53 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { UI_TEXT } from '../consts';
+
+type Props = {
+  title: string;
+  cv?: string;
+  lang?: string;
+  back?: string;
+};
+
+const { title, cv, lang, back } = Astro.props as Props;
+const locale = (lang ?? 'en') as keyof typeof UI_TEXT;
+const cvURL = lang ? `/${locale}/curriculum.pdf` : './curriculum.pdf';
+
+const backLabel = UI_TEXT[locale]?.header.back ?? UI_TEXT.en.header.back;
+---
+<header class="fixed top-4 right-4 z-50 w-auto px-4 py-2 border border-slate-800/50 bg-slate-950/80 backdrop-blur-md rounded-lg flex items-center transition-all duration-300 shadow-lg">
+  <nav class="flex items-center gap-4">
+    <ul class="flex items-center gap-2 md:gap-4 m-0 p-0 list-none text-lg">
+      {back ? (
+        <li>
+          <button type="button" class="back-link inline-flex items-center gap-1.5 px-3 py-1.5 text-slate-200 hover:text-violet-400 hover:underline decoration-2 underline-offset-4 bg-transparent border-none cursor-pointer transition-colors font-inherit" data-fallback={back}>
+            <span aria-hidden="true">←</span>
+            {backLabel}
+          </button>
+        </li>
+      ) : null}
+      {cv ? <HeaderLink href={cvURL}>{cv}</HeaderLink> : null}
+    </ul>
+  </nav>
+</header>
+
+{back ? (
+	<script is:inline>
+		const attrName = 'data-back-nav-handler';
+		if (!document.documentElement.hasAttribute(attrName)) {
+			document.documentElement.setAttribute(attrName, 'true');
+			document.addEventListener('click', (event) => {
+				const target = event.target;
+				const button = target instanceof Element ? target.closest('button[data-fallback]') : null;
+				if (!button) return;
+				event.preventDefault();
+				if (window.history.length > 1) {
+					window.history.back();
+				} else {
+					const fallback = button.dataset.fallback || '/';
+					window.location.href = fallback;
+				}
+			});
+		}
+	</script>
+) : null}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0;url=/en/">
+    <script is:inline>
+        const lang = navigator.language.slice(0, 2);
+        if (lang === 'es') {
+            window.location.href = '/es/';
+        } else if (lang === 'pt') {
+            window.location.href = '/pt/';
+        } else {
+            window.location.href = '/en/';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,8 @@
+---
+type Props = Record<string, any>;
+
+const { ...props } = Astro.props as Props;
+---
+<tool-tip inert role='tooltip' tip-position='top' {...props}>
+  <slot />
+</tool-tip>

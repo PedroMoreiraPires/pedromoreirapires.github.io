@@ -1,0 +1,38 @@
+---
+import { hardSkills, softSkills } from "../consts";
+
+type Lang = keyof typeof softSkills;
+type Props = {
+  lang: Lang;
+  hardSkillTitle: string;
+  softSkillTitle: string;
+};
+
+const {lang, hardSkillTitle, softSkillTitle} = Astro.props as Props;
+---
+<section class="w-full max-w-5xl mx-auto px-4 py-20">
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-100">{hardSkillTitle}</h2>
+  <div class="flex flex-wrap justify-center gap-4">
+    {hardSkills.map((skill) => (
+      <div 
+        class="group relative px-4 py-2 rounded-lg border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 transition-all duration-300 cursor-default flex items-center gap-2 hover:-translate-y-1 hover:shadow-lg"
+        style={{ borderColor: `${skill.color}40` }}
+      >
+        <span class="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: skill.color, boxShadow: `0 0 10px ${skill.color}` }}></span>
+        <span class="text-slate-200 font-medium group-hover:text-white transition-colors">{skill.name}</span>
+        <div class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none" style={{ backgroundColor: skill.color }}></div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="w-full max-w-5xl mx-auto px-4 py-12">
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-100">{softSkillTitle}</h2>
+  <ul class="flex flex-wrap justify-center gap-4 list-none p-0">
+    {softSkills[lang].map((skill) => (
+      <li class="px-6 py-3 rounded-full bg-slate-800/30 text-slate-200 border border-slate-700/50 hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-violet-300 transition-all duration-300 cursor-default">
+        {skill}
+      </li>
+    ))}
+  </ul>
+</section>

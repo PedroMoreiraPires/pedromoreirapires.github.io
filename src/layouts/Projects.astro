@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
+import { Image } from 'astro:assets';
+import { UI_TEXT } from '../consts';
+import githubIcon from '../assets/github.svg';
+
+type Props = CollectionEntry<'projects'>['data'] & {
+  lang?: string;
+  cv?: string;
+};
+
+const { id, title, description, heroImage, categories = [], lang, cv, github } = Astro.props as Props;
+const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
+const derivedLang = (lang ?? pathSegments[1] ?? 'en') as keyof typeof UI_TEXT;
+const localeBackPath = derivedLang === 'en' ? '/' : `/${derivedLang}/`;
+
+const resolvedCv = cv ?? UI_TEXT[derivedLang]?.header.cv ?? UI_TEXT.en.header.cv;
+---
+
+<html lang={derivedLang} class="scroll-smooth">
+	<head>
+		<BaseHead title={title} description={description} />
+		<ClientRouter />
+	</head>
+
+	<body class="bg-slate-950 text-slate-200 antialiased">
+		<Header title="Pedro Moreira Pires" cv={resolvedCv} lang={derivedLang} back={localeBackPath} />
+		<main class="w-full max-w-4xl mx-auto px-4 py-12 md:py-20">
+			<article class="space-y-8">
+				<div class="hero-image w-full rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/10 mb-12">
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" class="w-full h-auto object-cover" transition:name={`image-${id}`} loading="eager" />}
+				</div>
+				
+				<div class="space-y-6 text-center md:text-left">
+					<div class="flex flex-wrap justify-center md:justify-start gap-2" transition:name={`categories-${id}`}>
+                        {categories.map((category) => (
+                            <span class="px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-sm font-medium border border-violet-500/20">
+                                {category}
+                            </span>
+                        ))}
+                    </div>
+					
+					<h1 class="text-4xl md:text-5xl font-bold text-slate-100 tracking-tight" transition:name={`title-${id}`}>{title}</h1>
+                    <p class="text-xl text-slate-400 leading-relaxed max-w-3xl">{description}</p>
+                    
+                    {github && (
+                        <div class="pt-4">
+                            <a
+                              href={github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-500/10 text-violet-300 text-slate-950 transition-all duration-300 font-medium group shadow-lg shadow-white/5 hover:bg-gradient-to-r hover:from-violet-500/10 hover:to-violet-300/20"
+                            >
+                              <img src={githubIcon.src} alt="GitHub" class="w-5 h-5 transition-transform group-hover:scale-110" />
+                              <span>{UI_TEXT[derivedLang]?.projects.viewRepository ?? UI_TEXT.en.projects.viewRepository}</span>
+                            </a>
+                        </div>
+                    )}
+
+					<hr class="border-slate-800 my-8" />
+				</div>
+                
+				<div class="prose prose-invert prose-lg max-w-none prose-headings:text-slate-100 prose-a:text-violet-400 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl">
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
