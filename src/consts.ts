@@ -159,7 +159,7 @@ export const UI_TEXT = {
     },
     skills: {
       hard: "Habilidades Técnicas",
-      soft: "Habilidades Blandas",
+      soft: "Habilidades Pessoais",
     }
   }
 };
